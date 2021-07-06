@@ -1,4 +1,4 @@
-## *RL for BGC components*
+## **RL for BGC components**
 A reinforcement learning approach to support improving components in fungal candidate BGCs, based on Pfam protein domains and optional use of BGC functional annotations.
 
 #### **How to start**
