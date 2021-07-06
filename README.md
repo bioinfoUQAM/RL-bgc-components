@@ -22,7 +22,7 @@ To train the reinforcement learner, from the project `virtualenv` simply run:
 #### **Test - configure & run**
 
 At the `[prediction]` section  in the `config.init` file: 
-- set `True` to parameters ``, ``, and ``  to use the functional annotation strategies available
+- set `True` to parameters `neighbor.weight`, `dry.islands`, and `average.action`  to use the functional annotation strategies available
 
 At the `[eval]` section  in the `config.init` file, use the following parameters to indicate the requested inputs: 
 - `result.path`: file with list of candidate BGC predictions 
