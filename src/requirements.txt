@@ -1,0 +1,14 @@
+biopython
+configparser
+findspark
+gff3
+nltk
+numpy
+pandas
+py
+py4j
+pyparsing
+pyspark
+python-dateutil
+pytz
+six

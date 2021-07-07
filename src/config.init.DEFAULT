@@ -1,0 +1,52 @@
+[default]
+home =              /path/to/home/
+
+[prediction]
+# task type: 'train', 'validation', 'test', 'crossvalid', 'gridsearch'
+task =              train
+source.path =       ${default:home}/corpus
+# source sequence type ->  nucleotide, aminoacid, domains
+source.type =       aminoacid
+# percentage of positives in the train (path) dataset
+pos.perc =          50
+dict.path =         ${default:home}/path/to/dict
+# feature type: 'domains', 'kmers', 'go', 'domains_pfam'
+feat.type =         domains_pfam
+feat.minOcc =       3
+feat.size =         6
+feat.reduc =        none
+###### parametes: RL ######
+episodes =          500
+alpha =             0.01
+gamma =             0.01
+epsilon =           0.01
+penalty.threshold = 0
+keepskip.threshold = 0.5
+neighbor.weight =   False
+dry.islands =       False
+average.action =    False
+
+[eval]
+# task type: 'evaluate', 'summarize'
+task =              evaluate
+goldID.path =       ${default:home}/Databases/sample-goldClusters
+result.path =       {default:home}/corpus/metrics/
+similarity.path =   ${default:home}/Databases/sample-similarity.blast
+# min prediction confidence value to be rounded to 1
+threshold =         0.5
+# successive positive clusters: '0' > value > '3'
+successive =        0
+# merge positive clusters: 'True' or 'False'
+merge =             False
+# use majority from overlap
+majority =          False
+gene.length =       ${default:home}/Databases/sample-geneLength
+gene.map =          ${default:home}/Databases/sample-geneMap
+weights =           ${default:home}/Databases/sample-componentAnnotations
+# use similarity scores: True or False
+similarity =        False
+q.filter =          True
+rule.filter =       False
+rule.list =         ${default:home}/path/to/domainsToFilter
+split =             False
+split.threshold =   3
