@@ -14,7 +14,7 @@ class QLearner:
         self.path = Utils.normalizePath(self.path)
         self.trainPath = self.path + 'train/'
         self.testPath = self.path + 'test/'
-        self.outputPath = self.path + 'metricsQLearner/models/'
+        self.outputPath = self.path + 'metrics/models/'
         self.geneMapPath = self.config.get('eval', 'gene.map')
         self.geneMap = {}
         self.extractor = Extractor.Extractor(self.config, self.outputPath)
@@ -55,7 +55,6 @@ class QLearner:
         dataset = Parsers.parseDatasetContents(path, 'domains_pfam', 'domains')
         contentRDD = sparkContext.parallelize(dataset, numSlices=1000)
         perinstanceRDD = contentRDD.map(lambda x: (x[0][2], [x[0][1]])).reduceByKey(add)
-        # format tuple {filename, ([domains], fastaID(genes))}
         return perinstanceRDD.collect()
 
 
@@ -73,7 +72,7 @@ class QLearner:
                 states = entry[1] # domains only
                 actionType = ''
                 totalStates += len(states)
-                #while not done:
+
                 for j, state in enumerate(states):
                     state = state.split('.')[0]
                     stateIdx = self.rewardIDs.index(state)
@@ -101,7 +100,7 @@ class QLearner:
                     newQValue = oldQValue + self.alpha * (reward + self.gamma * nextMax - oldQValue)
                     self.QTable[stateIdx, action] = newQValue
 
-                    if (reward < self.penaltyThreshold):  # better define penalties
+                    if (reward < self.penaltyThreshold):  
                         penalty += 1
 
             penalties.append(penalty)
@@ -123,7 +122,7 @@ class QLearner:
         self.rewardIDs = Utils.readFileLines(self.IDmapPath)
         self.QTable = np.load(self.QTablePath)
         domainAnalysisPath = resultpath + '.eval.Qdomains'
-        domainAnalysis = {} #'gene\tcandidateCluster\tstateAction\tdomains\n'
+        domainAnalysis = {} 
 
         if (not sparkContext):
             sparkContext = SparkContext(conf=self.extractor.initSpark())
@@ -274,7 +273,7 @@ class QLearner:
 
 
     # get Zero weight "dry" islands:
-    # given a thresholg of (3?) consecutive 0 weights,
+    # given a threshold of (3) consecutive 0 weights,
     # change decision from keep to skip (filter it out)
     # ------> does not apply to noDomain genes
     def clearDryIslands(self, geneDecisions, geneWeights, clusterGenes, threshold):
@@ -315,7 +314,7 @@ class QLearner:
     # independently of their decision (keep or skip)
     # (genes with weights: backbones, TEs, TFs, transporters)
     def adjustByNeighborWeights(self, geneDecisions, geneWeights, clusterGenes, windowSize):
-        candidatesSkip = clusterGenes #geneDecisions[1]
+        candidatesSkip = clusterGenes 
         for gene in candidatesSkip:
             idx = clusterGenes.index(gene)
             # window of size 2
@@ -323,7 +322,7 @@ class QLearner:
             postIdx = min(idx+windowSize+1, len(clusterGenes)-1) # shift one index position to be included in array slice
             precedentWeight = sum(geneWeights[precIdx:idx])
             posteriorWeight = sum(geneWeights[idx+1:postIdx])
-            #ownWeight = geneWeights[idx]
+
             # value > 1 means it is an annotation
             if(precedentWeight > 1 or posteriorWeight > 1):
                 geneWeights[idx] = 1 if geneWeights[idx] < 1 else geneWeights[idx] # value = 1 means it is a flagged neighbor
@@ -374,16 +373,14 @@ class QLearner:
             print('Rewards list empty.')
             exit(0)
 
-        #statlabels = ['id\tsum\tlen\tlabels']
+
         for i, line in enumerate(self.rewardIDs):
             scores = self.rewardLabels[i]
             posSum = sum(i for i in scores if i > 0)
             negSum = sum(i for i in scores if i < 0)
 
             ############  reward function to be defined here
-            #keepreward = (sumscores / nbscores)
             keepreward = posSum / len(self.rewardIDs)
-            #skipreward = ((nbscores - sumscores) / nbscores)
             skipreward = abs(negSum / len(self.rewardIDs))
             ############
 
@@ -391,8 +388,8 @@ class QLearner:
                 weightFactors = self.getWeightfactor(line)
                 if(weightFactors):
                     for factor in weightFactors:
-                        keepreward = keepreward * factor # in theory only keeps will be annotated
-                        #skipreward = skipreward * factor
+                        keepreward = keepreward * factor 
+
 
             # favors 'keep'.
             # a different way would be keepreward > skipreward, would skip ambiguous domains

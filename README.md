@@ -1,6 +1,13 @@
 ## **RL for BGC components**
 A reinforcement learning approach to support improving components in fungal candidate BGCs, based on Pfam protein domains and optional use of BGC functional annotations.
 
+
+#### **Requirements**
+
+Python 3.6+ is recommended. 
+Library dependencies can be found in `/src/requirements.txt`, and should be installed in the project `virtualenv` before starting.
+PySpark requires Java 8 or later (recommended 8 or 11) to be installed, and `JAVA_HOME` set.
+
 #### **How to start**
 
 Make a copy of `/src/config.init.DEFAULT`, and rename it to `/src/config.init`. Update the `[default] home` to the current project root path.
@@ -18,6 +25,7 @@ To train the reinforcement learner, from the project `virtualenv` simply run:
 (.env) user@foo:~bgc-components/src$ python -m pipeprediction.RL
 ```
 
+Trained models and features are outputted at `/metrics/models`.
 
 #### **Test - configure & run**
 

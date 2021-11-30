@@ -1,7 +1,4 @@
 from Bio import SeqIO
-from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
-from Bio.Alphabet import IUPAC
 from gff3 import Gff3
 from utils import UtilMethods as Utils
 from collections import OrderedDict
@@ -42,8 +39,6 @@ def orthogroupSeqs(orthofile, seqpath, limit):
                     thisseqfile = orthodir + tempseq.id + '.fasta'
                     content = '>' + tempseq.id + '\n' + tempseq.seq
                     Utils.writeFile(thisseqfile, content)
-                # else:
-                #     print('ID not found', str(id))
 
     print('Done writing seqs for orthogroups.')
     return output
@@ -144,15 +139,14 @@ def parseDatasetContents(dataPath, featType, sourceType):
         files += goTermFiles
         if (len(goTermFiles) < 1):
             print('No GO term files found in', dataPath)
-            exit()
 
     for file in files:
         ext = os.path.splitext(file)[1]
         lines = Utils.readFileLines(file)
         #handle genes with an added version number as NRRL3_00129.1
-        id = lines[0].replace('>','').replace('a','').split('.')[0]
+        id = lines[0].replace('>','') #.replace('a','').split('.')[0]
+        id = id.replace('a','').split('.')[0] if not id.isalpha() else id.split('.')[0]
         if ('fasta' in ext):
-            #content = Utils.readFileLines(file)[1].upper()
             content = lines[1].upper()
             content = normalizeSequence(content, sourceType)
             if('kmers' in featType):
@@ -161,7 +155,6 @@ def parseDatasetContents(dataPath, featType, sourceType):
                 result.append(((file, content, id), 'protanalys'))
 
         elif ('domain' in ext):
-            #content = Utils.readFileLines(file)[1:]
             content = lines[1:]
             # Comment out next line to keep domain name:
             content = [line.split('.')[0] for line in content]
@@ -176,60 +169,11 @@ def parseDatasetContents(dataPath, featType, sourceType):
                     result.append(((file, content, id), 'domains'))
 
         elif ('go' in ext):
-            #content = Utils.readFileLines(file)[1:]
             content = lines[1:]
             content = "\n".join(content)
             result.append(((file, content, id), 'go'))
 
     return result
-
-
-def normalizeSequence(content, sourceType):
-    translationTab = ''
-    if('nucleotide' in sourceType):
-        translationTab = dict.fromkeys(map(ord, 'BDEFHIJKLMNOPQRSUVXYWZ'), None)
-    elif('aminoacid' in sourceType):
-        translationTab = dict.fromkeys(map(ord, 'BJXZ-'), None)
-    result = content.translate(translationTab)
-
-    return result
-
-
-def translateGenBank2file(input):
-
-    results = parseGenBank(input)
-    region = input.split('region')[1].replace('.gbk', '')
-    outputseq = input.replace('gbk', 'fasta')
-    outputtranslate = outputseq.replace('/fasta', '/fastatranslation')
-
-    for record in results:
-        uniqueid = record.id + region
-        proteinseq = record.seq.translate()
-        descript = record.annotations.get('organism')
-        translation = ''
-        for item in record.features:
-            try:
-                if(item.qualifiers['translation']):
-                    translation += item.qualifiers['translation'][0]
-            except:
-                pass
-
-        tempseq = SeqRecord(id=uniqueid, seq=proteinseq, description=descript)
-        temptranslate = SeqRecord(id=uniqueid, seq=Seq(translation, IUPAC), description=descript)
-        SeqIO.write(tempseq, outputseq, 'fasta')
-        SeqIO.write(temptranslate, outputtranslate, 'fasta')
-
-
-    # for record in parseFasta(input):
-    #     recid = str(record.id).split('|')
-    #     uniqueid = recid[0] + '_' + recid[1]
-    #     # get description without id
-    #     descript = str(record.description).replace(('|').join(recid[0:2]),'')
-    #     filename = outputpath + uniqueid + '.fasta'
-    #     proteinseq = record.seq.translate()
-    #     temp = SeqRecord(id=uniqueid, seq=proteinseq, description=descript)
-    #     SeqIO.write(temp, filename, 'fasta')
-
 
 # parse fasta using biopython
 def parseFasta(entry):
@@ -334,6 +278,17 @@ def genBankToAminoacid(path):
                         translations += translation
 
     return list, translations
+
+
+def normalizeSequence(content, sourceType):
+    translationTab = ''
+    if('nucleotide' in sourceType):
+        translationTab = dict.fromkeys(map(ord, 'BDEFHIJKLMNOPQRSUVXYWZ'), None)
+    elif('aminoacid' in sourceType):
+        translationTab = dict.fromkeys(map(ord, 'BJXZ-'), None)
+    result = content.translate(translationTab)
+
+    return result
 
 
 # parse GenBank file to a string (nucleotide sequence)
