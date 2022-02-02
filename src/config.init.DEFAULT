@@ -2,11 +2,12 @@
 home =              /path/to/home/
 
 [prediction]
-# task type: 'train', 'validation', 'test', 'crossvalid', 'gridsearch'
+# task type: 'train', 'test', 'crossvalid', 'gridsearch'
 task =              train
 source.path =       ${default:home}/corpus
 # source sequence type ->  nucleotide, aminoacid, domains
-source.type =       aminoacid
+source.type =       domains
+use.crossvalid =    False
 # percentage of positives in the train (path) dataset
 pos.perc =          50
 dict.path =         ${default:home}/path/to/dict
@@ -30,7 +31,7 @@ average.action =    False
 # task type: 'evaluate', 'summarize'
 task =              evaluate
 goldID.path =       ${default:home}/Databases/sample-goldClusters
-result.path =       {default:home}/corpus/metrics/
+result.path =       ${default:home}/corpus/metrics/
 similarity.path =   ${default:home}/Databases/sample-similarity.blast
 # min prediction confidence value to be rounded to 1
 threshold =         0.5

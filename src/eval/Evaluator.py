@@ -231,12 +231,15 @@ class GeneGoldProcess:
 
                 output += '\n' + clusterID + '\t' + cluster.split('\t')[0] + '\t' + (', ').join(goldBestMatches) + '\t' + str(prelen) + '\t' + str(poslen) + '\t' + '{:0.2f}'.format(percOverOriginal) + '\t' + '{:0.2f}'.format(percOverMerge) + '\t' + '{:0.2f}'.format(percTotal)
 
-        meanOrig = sum(percAllOriginal) / len(percAllOriginal)
-        meanMerge = sum(percAllMerge) / len(percAllMerge)
-        meanTotal = sum(percAllTotal) / len(percAllTotal)
+                meanOrig = sum(percAllOriginal) / len(percAllOriginal)
+                meanMerge = sum(percAllMerge) / len(percAllMerge)
+                meanTotal = sum(percAllTotal) / len(percAllTotal)
 
-        header = 'average % overestimated orig genes\taverage % overestimated postprocessed genes\taverage % overestimated total genes\n' + '{:0.2f}'.format(meanOrig) + '\t' + '{:0.2f}'.format(meanMerge) + '\t' + '{:0.2f}'.format(meanTotal) + '\n'
-        output = header + output
+                header = 'average % overestimated orig genes\taverage % overestimated postprocessed genes\taverage % overestimated total genes\n' + '{:0.2f}'.format(meanOrig) + '\t' + '{:0.2f}'.format(meanMerge) + '\t' + '{:0.2f}'.format(meanTotal) + '\n'
+                output = header + output
+
+            else:
+                output = 'No matches found with gold standard clusters. '
 
         print('Done computing overestimating error.')
 
