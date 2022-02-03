@@ -22,10 +22,14 @@ At the `[prediction]` section  in the `config.init` file, specify the minimum pa
 To train the reinforcement learner, from the project `virtualenv` simply run:
 
 ```bash
-(.env) user@foo:~bgc-components/src$ python -m pipeprediction.RL
+(.env) user@foo:~RL-bgc-components/src$ python -m pipeprediction.RL
 ```
 
-Trained models and features are outputted at `/metrics/models`.
+Training data can be obtained at [this repository](https://github.com/bioinfoUQAM/fungalbgcdata).
+Sample training data files are provided in `/corpus/train`.
+Model and feature files are outputted in `/corpus/metrics/models`.
+Trained model files (based on best performing parameters and balanced dataset) are also provided in `/corpus/metrics/models`.
+
 
 #### **Test - configure & run**
 
@@ -41,8 +45,14 @@ At the `[eval]` section  in the `config.init` file, use the following parameters
 
 Sample files are provided in `/Databases` and `/corpus/metrics`.
 
+Candidate BGC predictions can be obtained using a BGC prediction tool, such as [TOUCAN](https://github.com/bioinfoUQAM/TOUCAN), or generated in the same format as `/corpus/metrics/sample-candidateBGCs.IDs.test`.
+Amino acid sequence lengths for candidate BGC genes can be extracted from the FASTA sequence file(s), and listed in the same format as `/Databases/sample-geneLength`.
+Pfam protein domains per genes can be obtained using [PfamScan](https://www.ebi.ac.uk/Tools/pfa/pfamscan/), and listed in the same format as `/Databases/sample-geneMap/*.domains` (similar to FASTA). 
+
 To use the reinforcement learner and evaluate candidate BGCs, from the project `virtualenv` simply run:
 
 ```bash
-(.env) user@foo:~bgc-components/src$ python -m eval.Evaluator
+(.env) user@foo:~RL-bgc-components/src$ python -m eval.Evaluator
 ```
+
+Result files are outputted in `/corpus/metrics/`.
