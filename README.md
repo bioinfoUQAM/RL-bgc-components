@@ -4,9 +4,10 @@ A reinforcement learning approach to support improving components in fungal cand
 
 #### **Requirements**
 
-Python 3.6+ is recommended. 
+Unix/Linux and Python 3.6+ are recommended. 
 Library dependencies can be found in `/src/requirements.txt`, and should be installed in the project `virtualenv` before starting.
 PySpark requires Java 8 or later (recommended 8 or 11) to be installed, and `JAVA_HOME` set.
+On Windows environments PySpark may require [additional steps](https://cwiki.apache.org/confluence/display/HADOOP2/WindowsProblems), such as obtaining Hadoop native libraries for Windows and setting `HADOOP_HOME`.
 
 #### **How to start**
 
