@@ -26,7 +26,7 @@ To train the reinforcement learner, from the project `virtualenv` simply run:
 (.env) user@foo:~RL-bgc-components/src$ python -m pipeprediction.RL
 ```
 
-Training data can be obtained at [this repository](https://github.com/bioinfoUQAM/fungalbgcdata).
+Training data can be obtained at [this repository](https://github.com/bioinfoUQAM/fungalbgcdata), and training files should be placed at `/corpus/train`.
 Sample training data files are provided in `/corpus/train`.
 Model and feature files are outputted in `/corpus/metrics/models`.
 Trained model files (based on best performing parameters and balanced dataset) are also provided in `/corpus/metrics/models`.
