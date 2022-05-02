@@ -34,6 +34,9 @@ Trained model files (based on best performing parameters and balanced dataset) a
 
 #### **Test - configure & run**
 
+Candidate BGC predictions to be optimized can be obtained using a BGC prediction tool, such as [TOUCAN](https://github.com/bioinfoUQAM/TOUCAN). 
+The inputted candidate BGCs must be in a tab-separated values (TSV) named *.IDs.test file, containing the genes/regions in a candidate BGC and its predicted label. The input file is placed in the `/corpus/metrics` folder, as the sample file `/corpus/metrics/sample-candidateBGCs.IDs.test`.
+
 At the `[prediction]` section  in the `config.init` file: 
 - set `True` to parameters `neighbor.weight`, `dry.islands`, and `average.action`  to use the functional annotation strategies available
 
@@ -41,14 +44,14 @@ At the `[eval]` section  in the `config.init` file, use the following parameters
 - `result.path`: file with list of candidate BGC predictions 
 - `goldID.path`: file with list of gold BGC clusters (for comparison, if available)
 - `similarity.path`: file with output from a BLAST all-vs-all for target genome (if available)
-- `gene.length`: file with list of amino acid length for each gene (or designated genome regions)
-- `gene.map`: path for all files of domains per gene (or designated genome regions)
+- `gene.length`: file with list of amino acid length[^1] for each gene (or designated genome regions)
+- `gene.map`: path for all files of domains per gene[^2] (or designated genome regions)
 
 Sample files are provided in `/Databases` and `/corpus/metrics`.
 
-Candidate BGC predictions can be obtained using a BGC prediction tool, such as [TOUCAN](https://github.com/bioinfoUQAM/TOUCAN), or generated in the same format as `/corpus/metrics/sample-candidateBGCs.IDs.test`.
-Amino acid sequence lengths for candidate BGC genes can be extracted from the FASTA sequence file(s), and listed in the same format as `/Databases/sample-geneLength`.
-Pfam protein domains per genes can be obtained using [PfamScan](https://www.ebi.ac.uk/Tools/pfa/pfamscan/), and listed in the same format as `/Databases/sample-geneMap/*.domains` (similar to FASTA). 
+[^1]: Amino acid sequence lengths for candidate BGC genes can be extracted from the FASTA sequence file(s), and listed in the same format as `/Databases/sample-geneLength`.
+[^2]: Pfam protein domains per genes can be obtained using [PfamScan](https://www.ebi.ac.uk/Tools/pfa/pfamscan/), and listed in the same format as `/Databases/sample-geneMap/*.domains` (similar to FASTA). 
+
 
 To use the reinforcement learner and evaluate candidate BGCs, from the project `virtualenv` simply run:
 
